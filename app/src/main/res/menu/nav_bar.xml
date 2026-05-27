@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item
+		android:id="@+id/task_navbar"
+		android:title="@string/task_title"
+		android:icon="@drawable/ic_task" />
+	<item
+		android:id="@+id/routine_navbar"
+		android:title="@string/routine_title"
+		android:icon="@drawable/ic_routine" />
+	<item
+		android:id="@+id/more_navbar"
+		android:title="@string/more_title"
+		android:icon="@drawable/ic_more" />
+</menu>

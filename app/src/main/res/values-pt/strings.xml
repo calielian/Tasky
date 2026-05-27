@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="task_title">Tarefa</string>
+	<string name="routine_title">Rotina</string>
+	<string name="more_title">Mais</string>
+</resources>
