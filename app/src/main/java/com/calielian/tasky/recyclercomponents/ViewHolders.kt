@@ -6,6 +6,7 @@ import com.calielian.tasky.database.RoutineEntity
 import com.calielian.tasky.database.TaskCompletedEntity
 import com.calielian.tasky.database.TaskEntity
 import com.calielian.tasky.databinding.TaskLayoutBinding
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class ViewHolders(private val binding: TaskLayoutBinding): RecyclerView.ViewHolder(binding.root) {
@@ -57,23 +58,26 @@ class ViewHolders(private val binding: TaskLayoutBinding): RecyclerView.ViewHold
 			binding.itemDescription.visibility = View.GONE
 		}
 
-		if (routine.date != null) {
-			dateText += routine.date.format(dateFormatter)
-		}
+		dateText += routine.date.format(dateFormatter)
 
-		if (routine.time != null) {
-			dateText += " " + routine.time.format(timeFormatter)
-			dateText = dateText.trim()
-		}
+		dateText += " " + routine.time.format(timeFormatter)
+		dateText = dateText.trim()
 
-		if (dateText != "") {
-			binding.itemDate.text = dateText
-		} else {
-			binding.itemDate.visibility = View.GONE
-		}
+		binding.itemDate.text = dateText
 
-		binding.radioButton.setOnCheckedChangeListener { _, _ ->
-			onCheckedChange(routine)
+		val now = LocalDate.now()
+		val isNow = routine.date.isEqual(now)
+
+		binding.radioButton.setOnCheckedChangeListener(null)
+
+		binding.radioButton.isChecked = routine.checked
+
+		binding.radioButton.isEnabled = isNow
+
+		binding.radioButton.setOnCheckedChangeListener { _, isChecked ->
+			if (isChecked && isNow) {
+				onCheckedChange(routine)
+			}
 		}
 
 		binding.root.setOnClickListener {

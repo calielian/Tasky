@@ -161,8 +161,8 @@ class TaskFragment : Fragment() {
 
 		lifecycleScope.launch {
 			viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-				viewModel.allTasks.collect { lista ->
-					adapter.submitList(lista)
+				viewModel.allTasks.collect { list ->
+					adapter.submitList(list)
 				}
 			}
 		}

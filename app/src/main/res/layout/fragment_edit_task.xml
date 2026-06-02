@@ -61,11 +61,10 @@
 	</com.google.android.material.textfield.TextInputLayout>
 
 	<com.google.android.material.textfield.TextInputLayout
+		android:id="@+id/task_description_input_layout"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:hint="@string/task_description_input_hint"
-
-		app:hintEnabled="true">
+		android:hint="@string/task_description_input_hint">
 
 		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/task_description_input"

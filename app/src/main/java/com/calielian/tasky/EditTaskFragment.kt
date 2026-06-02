@@ -31,6 +31,8 @@ class EditTaskFragment : Fragment() {
 	private var taskDate: LocalDate? = null
 	private var taskTime: LocalTime? = null
 
+	private var routineChecked = false
+
 	private var _binding: FragmentEditTaskBinding? = null
 	private val binding get() = _binding!!
 
@@ -73,6 +75,10 @@ class EditTaskFragment : Fragment() {
 
 			it.getString(ARG_TIME)?.let { date ->
 				taskTime = LocalTime.parse(date)
+			}
+
+			if (fragmentType == "routine") {
+				routineChecked = it.getBoolean(ARG_CHECKED)
 			}
 		}
 	}
@@ -130,14 +136,17 @@ class EditTaskFragment : Fragment() {
 			}
 		}
 
-		binding.dateChip.setOnCloseIconClickListener {
-			binding.dateChip.visibility = View.GONE
-			taskDate = null
-		}
+		if (fragmentType == "task") {
+			binding.dateChip.setOnCloseIconClickListener {
+				binding.dateChip.visibility = View.GONE
+				taskDate = null
+			}
 
-		binding.timeChip.setOnCloseIconClickListener {
-			binding.timeChip.visibility = View.GONE
-			taskTime = null
+			binding.timeChip.setOnCloseIconClickListener {
+				binding.timeChip.visibility = View.GONE
+				taskTime = null
+			}
+
 		}
 
 		binding.taskTitleInput.doOnTextChanged { _, _, _, _ ->
@@ -169,8 +178,9 @@ class EditTaskFragment : Fragment() {
 					id = taskId!!,
 					title = title,
 					description = description,
-					date = taskDate,
-					time = taskTime
+					date = taskDate!!,
+					time = taskTime!!,
+					routineChecked
 				)
 
 				routineViewModel.updateRoutine(updatedRoutine)
@@ -188,8 +198,13 @@ class EditTaskFragment : Fragment() {
 	fun changeItemsToMatchFragmentType() {
 		if (fragmentType == "routine") {
 			binding.fragmentTitle.text = getString(R.string.edit_routine_title)
-			binding.taskTitleInput.hint = getString(R.string.routine_title_input_hint)
-			binding.taskDescriptionInput.hint = getString(R.string.routine_description_input_hint)
+			binding.taskTitleInputLayout.hint = getString(R.string.routine_title_input_hint)
+			binding.taskDescriptionInputLayout.hint = getString(R.string.routine_description_input_hint)
+			binding.dateChip.closeIcon = null
+			binding.timeChip.closeIcon = null
+
+			if (taskDate == null) taskDate = LocalDate.now()
+			if (taskTime == null) taskTime = LocalTime.now()
 		}
 	}
 
@@ -200,9 +215,10 @@ class EditTaskFragment : Fragment() {
 		private const val ARG_DESCRIPTION = "description"
 		private const val ARG_DATE = "date"
 		private const val ARG_TIME = "time"
+		private const val ARG_CHECKED = "checked"
 
 		@JvmStatic
-		fun newInstance(fragmentType: String, id: Int, taskTitle: String, taskDescription: String?, taskDate: String?, taskTime: String?) =
+		fun newInstance(fragmentType: String, id: Int, taskTitle: String, taskDescription: String?, taskDate: String?, taskTime: String?, checked: Boolean = false) =
 			EditTaskFragment().apply {
 				arguments = Bundle().apply {
 					putString(ARG_FRAGMENT_TYPE, fragmentType)
@@ -211,6 +227,7 @@ class EditTaskFragment : Fragment() {
 					putString(ARG_DESCRIPTION, taskDescription)
 					putString(ARG_DATE, taskDate)
 					putString(ARG_TIME, taskTime)
+					putBoolean(ARG_CHECKED, checked)
 				}
 			}
 	}
