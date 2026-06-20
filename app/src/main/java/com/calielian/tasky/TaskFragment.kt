@@ -152,11 +152,12 @@ class TaskFragment : Fragment() {
 				if (newTaskDate != null || newTaskTime != null) {
 					lifecycleScope.launch {
 						val taskToSchedule = if (newTaskDate != null && newTaskTime == null) {
-							// todo: what if the default alarm time is in past?
+							val defaultTime = dataStore.getDefaultAlarmTime().first()
+
+							if (LocalDateTime.now().isAfter(LocalDateTime.of(newTaskDate, LocalTime.parse(defaultTime)))) return@launch
+
 							newTask.copy(
-								time = LocalTime.parse(
-									dataStore.getDefaultAlarmTime().first()
-								)
+								time = LocalTime.parse(defaultTime)
 							)
 						} else if (newTaskDate == null) {
 							newTask.copy(date = LocalDate.now())
