@@ -50,18 +50,30 @@ class ViewHolders(private val binding: TaskLayoutBinding): RecyclerView.ViewHold
 			onClick(task)
 		}
 
+		val colorError = MaterialColors.getColor(
+			binding.root,
+			MaterialR.attr.colorErrorContainer
+		)
+
+		val colorNormal = MaterialColors.getColor(
+			binding.root,
+			MaterialR.attr.colorSurfaceContainer
+		)
+
 		if (task.date != null && task.time != null) {
-			val colorError = MaterialColors.getColor(
-				binding.root,
-				MaterialR.attr.colorErrorContainer
-			)
-
-			val colorNormal = MaterialColors.getColor(
-				binding.root,
-				MaterialR.attr.colorSurfaceContainer
-			)
-
 			if (LocalDateTime.of(task.date, task.time).isBefore(LocalDateTime.now())) {
+				binding.background.setCardBackgroundColor(colorError)
+			} else {
+				binding.background.setCardBackgroundColor(colorNormal)
+			}
+		} else if (task.date != null) {
+			if (task.date.isBefore(LocalDate.now())) {
+				binding.background.setCardBackgroundColor(colorError)
+			} else {
+				binding.background.setCardBackgroundColor(colorNormal)
+			}
+		} else if (task.time != null) {
+			if (task.time.isBefore(LocalDateTime.now().toLocalTime())) {
 				binding.background.setCardBackgroundColor(colorError)
 			} else {
 				binding.background.setCardBackgroundColor(colorNormal)
